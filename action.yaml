@@ -1,0 +1,30 @@
+name: "Python & Poetry"
+description: "GitHub action that installs Python and Poetry package manager"
+author: "@mishaga"
+branding:
+  icon: "code"
+  color: "yellow"
+
+inputs:
+  python-version:
+    description: "Python version"
+  poetry-version:
+    description: "Poetry version"
+    default: "latest"
+  shell:
+    description: "Which shell to use"
+    default: "bash"
+
+runs:
+  using: "composite"
+  steps:
+      - name: Set up Python ${{ inputs.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Install Poetry
+        shell: ${{ inputs.shell }}
+        run: |
+          if [ "${{ inputs.poetry-version }}" != "latest" ]; then export POETRY_VERSION=${{ inputs.poetry-version }}; fi
+          curl -sSL https://install.python-poetry.org | python3 -
